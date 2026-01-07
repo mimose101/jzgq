@@ -1,722 +1,794 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Network - Protect Earth</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>小小特工摩斯密码训练营</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary: #2e7d32;
-            --secondary: #4caf50;
-            --accent: #8bc34a;
-            --light: #e8f5e9;
-            --dark: #1b5e20;
-            --text: #333333;
-            --white: #ffffff;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Zcool+KuaiLe&display=swap');
 
         body {
-            background-color: var(--light);
-            color: var(--text);
-            line-height: 1.6;
+            font-family: 'Zcool KuaiLe', cursive, sans-serif; /* Fallback to sans-serif if font doesn't load */
+            background-color: #f0f9ff;
+            touch-action: manipulation; /* Prevent zoom on double tap */
+            user-select: none;
         }
 
-        header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        .btn-push {
+            transition: all 0.1s;
+            box-shadow: 0px 6px 0px 0px rgba(0,0,0,0.2);
+        }
+        .btn-push:active {
+            transform: translateY(6px);
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.2);
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .logo i {
-            font-size: 2rem;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent);
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--white);
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
+        .dot-btn { background-color: #fbbf24; color: #78350f; } /* Amber */
+        .dash-btn { background-color: #3b82f6; color: #1e3a8a; } /* Blue */
+        
+        .morse-display span {
             display: inline-block;
-            background-color: var(--accent);
-            color: var(--white);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        /* Custom Scrollbar for the dictionary */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
         }
 
-        .btn:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        .animate-pop {
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        section {
-            padding: 5rem 0;
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .signal-flash {
+            animation: flash 0.2s ease-in-out;
+        }
+        @keyframes flash {
+            0% { background-color: transparent; }
+            50% { background-color: rgba(255, 255, 255, 0.8); }
+            100% { background-color: transparent; }
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent);
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: var(--text);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-img {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-img img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .about-img:hover img {
-            transform: scale(1.05);
-        }
-
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem 1rem;
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .stat-item i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .stat-item h3 {
-            font-size: 2.5rem;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            color: var(--text);
-        }
-
-        .initiatives {
-            background-color: var(--white);
-        }
-
-        .initiatives-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .initiative-card {
-            background-color: var(--light);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .initiative-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .initiative-img {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .initiative-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .initiative-card:hover .initiative-img img {
-            transform: scale(1.1);
-        }
-
-        .initiative-content {
-            padding: 1.5rem;
-        }
-
-        .initiative-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .initiative-content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .cta {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            text-align: center;
-            padding: 5rem 0;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta .btn {
-            background-color: var(--white);
-            color: var(--primary);
-        }
-
-        .cta .btn:hover {
-            background-color: var(--accent);
-            color: var(--white);
-        }
-
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent);
-        }
-
-        .footer-column p {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links li a {
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links li a:hover {
-            color: var(--accent);
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--accent);
-            transform: translateY(-5px);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 992px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
-                flex-direction: column;
-                padding: 1rem 0;
-                text-align: center;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            }
-            
-            nav ul.active {
-                display: flex;
-            }
-            
-            nav ul li {
-                margin: 0;
-                padding: 0.8rem 0;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animation for stats counter */
-        .counter {
-            transition: all 0.5s ease;
+        .mnemonic-text {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            font-family: sans-serif;
+            font-weight: bold;
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <i class="fas fa-seedling"></i>
-                <span>Green Network</span>
-            </div>
-            <nav>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#initiatives">Initiatives</a></li>
-                    <li><a href="#get-involved">Get Involved</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<body class="h-screen w-full flex flex-col items-center justify-center bg-sky-100 overflow-hidden">
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container hero-content">
-            <h1>Protect Our Planet, Preserve Our Future</h1>
-            <p>Join the global movement to create a sustainable world through conservation, education, and community action.</p>
-            <a href="#get-involved" class="btn">Join Our Network</a>
-        </div>
-    </section>
+    <!-- Audio Context Start Overlay (Required for browsers) -->
+    <div id="start-overlay" class="fixed inset-0 z-50 bg-sky-900/90 flex flex-col items-center justify-center text-white p-4">
+        <i class="fas fa-headphones-alt text-6xl mb-6 text-yellow-300 animate-bounce"></i>
+        <h1 class="text-4xl mb-4 text-center">准备好成为小小特工了吗？</h1>
+        <p class="mb-8 text-xl text-sky-200">请打开声音以获得最佳体验</p>
+        <button onclick="initGame()" class="bg-yellow-400 hover:bg-yellow-500 text-sky-900 text-2xl font-bold py-4 px-12 rounded-full shadow-lg transform transition hover:scale-105 btn-push">
+            开始训练！
+        </button>
+    </div>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Green Network</h2>
-                <p>We are a global community dedicated to environmental protection and sustainable development.</p>
+    <!-- Main Game Container -->
+    <div id="game-container" class="hidden w-full max-w-md h-full max-h-[90vh] bg-white rounded-3xl shadow-2xl flex flex-col relative overflow-hidden border-4 border-sky-300">
+        
+        <!-- Header -->
+        <header class="bg-sky-500 p-4 text-white flex justify-between items-center shrink-0 z-10">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-satellite-dish text-yellow-300 text-xl"></i>
+                <h1 class="text-xl font-bold tracking-wider">摩斯特工</h1>
             </div>
-            <div class="about-content">
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Team planting trees">
-                </div>
-                <div class="about-text">
-                    <h3>Our Mission</h3>
-                    <p>Green Network is committed to creating a sustainable future by protecting natural ecosystems, promoting renewable energy, and empowering communities to take environmental action.</p>
-                    <p>Founded in 2010, we've grown from a small grassroots organization to an international network with over 50,000 members across 120 countries.</p>
-                    <p>Our approach combines scientific research, community engagement, and policy advocacy to address the most pressing environmental challenges of our time.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
+            <div class="flex gap-2">
+                <button onclick="showHome()" class="bg-sky-600 p-2 rounded-lg hover:bg-sky-700 transition" title="返回主页">
+                    <i class="fas fa-home"></i>
+                </button>
             </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <i class="fas fa-tree"></i>
-                    <h3 class="counter" data-target="2500000">0</h3>
-                    <p>Trees Planted</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <h3 class="counter" data-target="50000">0</h3>
-                    <p>Active Members</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-globe-americas"></i>
-                    <h3 class="counter" data-target="120">0</h3>
-                    <p>Countries Reached</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-recycle"></i>
-                    <h3 class="counter" data-target="1500">0</h3>
-                    <p>Cleanup Projects</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- Initiatives Section -->
-    <section class="initiatives" id="initiatives">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Initiatives</h2>
-                <p>Discover the key programs and projects we're implementing to protect our planet.</p>
-            </div>
-            <div class="initiatives-grid">
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://dialogue.earth/content/uploads/2021/04/lessons-from-the-rush-to-reforest-china-dialogue-2400x1599.jpg" alt="Reforestation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Global Reforestation</h3>
-                        <p>Planting millions of trees worldwide to restore ecosystems, combat climate change, and protect biodiversity.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Ocean Conservation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Ocean Conservation</h3>
-                        <p>Protecting marine ecosystems, reducing plastic pollution, and promoting sustainable fishing practices.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80" alt="Renewable Energy">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Renewable Energy</h3>
-                        <p>Promoting solar, wind, and other clean energy sources to reduce dependence on fossil fuels.</p>
-                        <a href="#" class="btn">Learn More</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <!-- Dynamic Content Area -->
+        <main id="app-content" class="flex-1 overflow-hidden relative">
+            <!-- Content injected via JS -->
+        </main>
 
-    <!-- CTA Section -->
-    <section class="cta" id="get-involved">
-        <div class="container">
-            <h2>Join Our Global Movement</h2>
-            <p>Together, we can create a sustainable future for generations to come. Every action counts, no matter how small.</p>
-            <a href="#" class="btn">Become a Member</a>
-        </div>
-    </section>
+        <!-- Morse Input Controls (Visible in Game Modes) -->
+        <div id="controls-area" class="bg-slate-100 p-4 border-t-2 border-slate-200 shrink-0 hidden pb-8 md:pb-4">
+            
+            <!-- Display Screen -->
+            <div class="bg-slate-800 rounded-xl p-3 mb-4 min-h-[60px] flex items-center justify-between relative shadow-inner border-b-4 border-slate-600">
+                <div id="user-input-display" class="text-3xl font-mono text-green-400 tracking-widest pl-2"></div>
+                <div class="flex gap-2">
+                    <button onclick="backspace()" class="text-slate-400 hover:text-white p-2">
+                        <i class="fas fa-backspace"></i>
+                    </button>
+                    <button onclick="checkAnswer()" class="bg-green-500 hover:bg-green-600 text-white px-4 rounded-lg font-bold shadow active:transform active:translate-y-1 transition">
+                        发送 <i class="fas fa-paper-plane ml-1"></i>
+                    </button>
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Green Network</h3>
-                    <p>We are dedicated to protecting our planet through collaborative action, education, and sustainable solutions.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#initiatives">Initiatives</a></li>
-                        <li><a href="#get-involved">Get Involved</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Our Programs</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Reforestation</a></li>
-                        <li><a href="#">Ocean Cleanup</a></li>
-                        <li><a href="#">Wildlife Protection</a></li>
-                        <li><a href="#">Climate Education</a></li>
-                        <li><a href="#">Sustainable Agriculture</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Copper Creek Drive, New York</p>
-                    <p><i class="fas fa-phone"></i> +1 (312) 171-0771</p>
-                    <p><i class="fas fa-envelope"></i> support@greennetwork.org</p>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 Green Network. All rights reserved.</p>
+            <!-- Big Buttons -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Modified Buttons: Removed onmouseup/ontouchend, playFixedTone handled in handleInput -->
+                <button onmousedown="handleInput('.', 100)" ontouchstart="handleInput('.', 100)" 
+                    class="dot-btn h-24 rounded-2xl flex flex-col items-center justify-center gap-2 btn-push select-none active:scale-95 transform transition-transform">
+                    <div class="w-6 h-6 bg-amber-900 rounded-full"></div>
+                    <span class="text-2xl font-bold">滴 (短)</span>
+                </button>
+                <button onmousedown="handleInput('-', 300)" ontouchstart="handleInput('-', 300)"
+                    class="dash-btn h-24 rounded-2xl flex flex-col items-center justify-center gap-2 btn-push select-none active:scale-95 transform transition-transform">
+                    <div class="w-12 h-4 bg-blue-900 rounded-full"></div>
+                    <span class="text-2xl font-bold">答 (长)</span>
+                </button>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- Notification/Feedback Modal -->
+    <div id="modal" class="hidden absolute inset-0 z-40 bg-black/50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl animate-pop border-4 border-yellow-400">
+            <div id="modal-icon" class="text-6xl mb-4">🎉</div>
+            <h2 id="modal-title" class="text-2xl font-bold mb-2 text-slate-800">太棒了！</h2>
+            <p id="modal-msg" class="text-slate-600 mb-6">任务完成！</p>
+            <button onclick="closeModal()" class="w-full bg-sky-500 text-white font-bold py-3 rounded-xl shadow-lg btn-push">继续</button>
+        </div>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('nav ul').classList.toggle('active');
-        });
+        // --- Game Data ---
+        // Levels Logic: Numbers first, then Simple (E,T,I,M), then Medium, then Hard
+        // Modified: Split harder levels into smaller chunks for better progression
+        const LEVELS = [
+            { id: 1, name: "数字特训 (1-5)", chars: "12345", desc: "先从简单的数字开始！" },
+            { id: 2, name: "数字特训 (6-0)", chars: "67890", desc: "掌握剩下的数字！" },
+            { id: 3, name: "入门代号 (E/T/I/M)", chars: "ETIM", desc: "最基础的字母，由纯点或纯划组成。" },
+            { id: 4, name: "初级代号 (A/N/S/O)", chars: "ANSO", desc: "简单的混合信号。" },
+            { id: 5, name: "中级代号 (D/K/G/R)", chars: "DKGR", desc: "稍微复杂一点了！" },
+            { id: 6, name: "进阶特工 (W/U/H)", chars: "WUH", desc: "新的挑战来了！" },
+            { id: 7, name: "高级特工 (V/F/L)", chars: "VFL", desc: "注意节奏的变化！" },
+            { id: 8, name: "精英特工 (P/J/B)", chars: "PJB", desc: "你需要很好的记忆力！" },
+            { id: 9, name: "大师挑战 (X/C/Y)", chars: "XCY", desc: "非常容易混淆的信号！" },
+            { id: 10, name: "终极考验 (Z/Q)", chars: "ZQ", desc: "最后的难关，通关就是王牌特工！" }
+        ];
 
-        // Counter Animation
-        function animateCounters() {
-            const counters = document.querySelectorAll('.counter');
-            const speed = 200; // The lower the slower
+        const MORSE_CODE = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..',
+            '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+            '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.'
+        };
+
+        // 新增：节奏助记词（拟声词教学法）
+        // 这种技巧通过念出节奏来辅助记忆，比单纯看点划更有效
+        const MNEMONICS = {
+            'A': '滴-答', 'B': '答-滴-滴-滴', 'C': '答-滴-答-滴', 'D': '答-滴-滴',
+            'E': '滴', 'F': '滴-滴-答-滴', 'G': '答-答-滴', 'H': '滴-滴-滴-滴',
+            'I': '滴-滴', 'J': '滴-答-答-答', 'K': '答-滴-答', 'L': '滴-答-滴-滴',
+            'M': '答-答', 'N': '答-滴', 'O': '答-答-答', 'P': '滴-答-答-滴',
+            'Q': '答-答-滴-答', 'R': '滴-答-滴', 'S': '滴-滴-滴', 'T': '答',
+            'U': '滴-滴-答', 'V': '滴-滴-滴-答', 'W': '滴-答-答', 'X': '答-滴-滴-答',
+            'Y': '答-滴-答-答', 'Z': '答-答-滴-滴',
+            '0': '答-答-答-答-答', '1': '滴-答-答-答-答', '2': '滴-滴-答-答-答',
+            '3': '滴-滴-滴-答-答', '4': '滴-滴-滴-滴-答', '5': '滴-滴-滴-滴-滴',
+            '6': '答-滴-滴-滴-滴', '7': '答-答-滴-滴-滴', '8': '答-答-答-滴-滴',
+            '9': '答-答-答-答-滴'
+        };
+
+        // --- State Management ---
+        let audioCtx;
+        let oscillator;
+        let gainNode;
+        let toneTimeout; // Added to manage fixed duration timing
+        let currentMode = 'home'; // home, adventure, quiz, learn
+        let currentLevelIndex = 0;
+        let currentTarget = '';
+        let userInput = '';
+        let score = 0;
+        let unlockedLevels = 1; // Stores highest unlocked level ID
+        // Changed from Set to Object to track count: { 'A': 0, 'B': 1, 'C': 2 }
+        let levelProgress = {}; 
+
+        // --- Audio System ---
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playTone(freq = 600) {
+            if (!audioCtx) initAudio();
             
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
+            // Safety: Stop previous oscillator if it exists to prevent overlap
+            if(oscillator) {
+                try { oscillator.stop(); oscillator.disconnect(); } catch(e){}
+            }
+
+            oscillator = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Sound attack
+            gainNode.gain.exponentialRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+        }
+
+        function stopTone() {
+            if (gainNode && oscillator) {
+                // Capture the current nodes locally to ensure we stop the correct one
+                // even if global variables change due to rapid clicking
+                const oscToStop = oscillator;
+                const gainToFade = gainNode;
                 
-                const inc = target / speed;
+                gainToFade.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                setTimeout(() => {
+                    if (oscToStop) {
+                        try {
+                            oscToStop.stop();
+                            oscToStop.disconnect();
+                        } catch(e){}
+                    }
+                }, 100);
+            }
+        }
+
+        // Play a full sequence (e.g. ".-")
+        async function playSequence(code) {
+            if (!audioCtx) initAudio();
+            const dotDuration = 100; // ms
+            const dashDuration = 300; // ms
+            const pause = 100; // between symbols
+
+            // Disable buttons during playback
+            const btns = document.querySelectorAll('button');
+            btns.forEach(b => b.disabled = true);
+
+            for (let symbol of code) {
+                playTone(600);
+                // Visual feedback
+                const el = document.getElementById('target-visual');
+                if (el) el.classList.add('signal-flash');
                 
-                if(count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(animateCounters, 1);
-                } else {
-                    counter.innerText = target;
+                await new Promise(r => setTimeout(r, symbol === '.' ? dotDuration : dashDuration));
+                
+                stopTone();
+                if (el) el.classList.remove('signal-flash');
+                await new Promise(r => setTimeout(r, pause));
+            }
+
+            // Re-enable
+            btns.forEach(b => b.disabled = false);
+        }
+
+        // --- Core Logic ---
+
+        function initGame() {
+            initAudio();
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            showHome();
+        }
+
+        function showHome() {
+            currentMode = 'home';
+            document.getElementById('controls-area').classList.add('hidden');
+            const content = document.getElementById('app-content');
+            
+            content.innerHTML = `
+                <div class="h-full overflow-y-auto custom-scroll p-6 pb-20">
+                    <div class="text-center mb-8">
+                        <div class="w-24 h-24 bg-sky-200 rounded-full mx-auto flex items-center justify-center mb-4 text-5xl border-4 border-white shadow-lg">
+                            🕵️
+                        </div>
+                        <h2 class="text-2xl font-bold text-sky-800">特工训练菜单</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <button onclick="startLearnMode()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-4 btn-push transition">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">🎓</div>
+                            <div class="text-left">
+                                <div class="font-bold text-xl">教学模式</div>
+                                <div class="text-emerald-100 text-sm">口诀记忆，循序渐进</div>
+                            </div>
+                        </button>
+
+                        <button onclick="startAdventure()" class="w-full bg-orange-400 hover:bg-orange-500 text-white rounded-2xl p-4 shadow-lg flex items-center gap-4 btn-push transition">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">🚀</div>
+                            <div class="text-left">
+                                <div class="font-bold text-xl">闯关模式</div>
+                                <div class="text-orange-100 text-sm">挑战关卡，解锁新内容</div>
+                            </div>
+                        </button>
+
+                         <button onclick="startQuiz()" class="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-4 btn-push transition">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">❓</div>
+                            <div class="text-left">
+                                <div class="font-bold text-xl">自由测验</div>
+                                <div class="text-purple-100 text-sm">随机测试你的能力</div>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-8 text-center text-sky-400 text-sm">
+                        最高关卡记录: 第 ${unlockedLevels} 关
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Learning Mode (Teaching Mode) ---
+        function startLearnMode() {
+            currentMode = 'learn';
+            document.getElementById('controls-area').classList.add('hidden');
+            const content = document.getElementById('app-content');
+            
+            let html = `
+                <div class="h-full flex flex-col p-4 bg-slate-50">
+                    <div class="mb-4 bg-sky-100 p-3 rounded-xl flex items-center gap-3 text-sky-800 shrink-0">
+                        <i class="fas fa-music text-2xl"></i>
+                        <p class="text-sm"><b>技巧教学：</b><br>跟着卡片念节奏：“滴”是短，“答”是长！</p>
+                    </div>
+                    <div class="flex-1 overflow-y-auto custom-scroll pb-20 space-y-6">
+            `;
+
+            // Loop through Levels to generate structured sections
+            LEVELS.forEach(level => {
+                let gridHtml = '';
+                const chars = level.chars.split('');
+                
+                chars.forEach(char => {
+                    const code = MORSE_CODE[char];
+                    const mnemonic = MNEMONICS[char]; // Get mnemonic
+                    
+                    // Generate visual dots/dashes for the button
+                    // Fixed: Made dots/dashes smaller (w-1.5/w-4) to prevent overflow on small screens
+                    let visualCodeMini = code.split('').map(c => 
+                        c === '.' 
+                        ? `<div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>` 
+                        : `<div class="w-4 h-1.5 bg-blue-500 rounded-full"></div>`
+                    ).join('<div class="w-0.5"></div>');
+
+                    gridHtml += `
+                        <button onclick="playLearn('${char}')" class="bg-white border-2 border-slate-200 rounded-xl p-2 shadow-sm hover:shadow-md hover:border-emerald-400 transition flex flex-col items-center justify-center gap-1 active:scale-95 h-24 overflow-hidden group">
+                            <span class="text-2xl font-bold text-slate-700 leading-none group-hover:text-emerald-500 transition-colors">${char}</span>
+                            <div class="flex items-center justify-center mt-1 opacity-80 w-full overflow-hidden">
+                                ${visualCodeMini}
+                            </div>
+                            <div class="mnemonic-text text-xs text-sky-500/80 font-mono scale-90 group-hover:text-sky-600">${mnemonic}</div>
+                        </button>
+                    `;
+                });
+
+                html += `
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                        <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-2">
+                            <span class="bg-emerald-100 text-emerald-600 font-bold px-2 py-1 rounded text-xs whitespace-nowrap">第 ${level.id} 课</span>
+                            <h3 class="font-bold text-slate-700 truncate">${level.name}</h3>
+                        </div>
+                        <!-- Fixed: Changed grid-cols-4 to grid-cols-3 for better fit -->
+                        <div class="grid grid-cols-3 gap-2">
+                            ${gridHtml}
+                        </div>
+                        <div class="text-xs text-slate-400 mt-2 italic">${level.desc}</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+        }
+
+        function playLearn(char) {
+            playSequence(MORSE_CODE[char]);
+        }
+
+        // --- Adventure Mode ---
+        function startAdventure() {
+            currentMode = 'adventure';
+            showLevelSelect();
+        }
+
+        function showLevelSelect() {
+            document.getElementById('controls-area').classList.add('hidden');
+            const content = document.getElementById('app-content');
+            
+            let html = '<div class="h-full overflow-y-auto custom-scroll p-4 space-y-4 pb-20">';
+            
+            LEVELS.forEach((level, index) => {
+                const isLocked = level.id > unlockedLevels;
+                const statusClass = isLocked ? 'bg-slate-200 text-slate-400 grayscale' : 'bg-white border-2 border-orange-200 text-slate-800 hover:border-orange-400 shadow-md';
+                const icon = isLocked ? '<i class="fas fa-lock"></i>' : (level.id < unlockedLevels ? '<i class="fas fa-check-circle text-green-500"></i>' : '<i class="fas fa-play-circle text-orange-500"></i>');
+                
+                html += `
+                    <button ${isLocked ? 'disabled' : `onclick="playLevel(${index})"`} class="w-full text-left rounded-xl p-4 flex items-center justify-between transition ${statusClass}">
+                        <div>
+                            <div class="font-bold text-lg">第 ${level.id} 关: ${level.name}</div>
+                            <div class="text-xs mt-1 opacity-80">${level.desc}</div>
+                        </div>
+                        <div class="text-2xl ml-4">${icon}</div>
+                    </button>
+                `;
+            });
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function playLevel(levelIdx) {
+            currentLevelIndex = levelIdx;
+            // Initialize progress for this level: 0 for all chars
+            levelProgress = {};
+            LEVELS[levelIdx].chars.split('').forEach(char => {
+                levelProgress[char] = 0;
+            });
+            nextLevelRound();
+        }
+
+        function nextLevelRound() {
+            const level = LEVELS[currentLevelIndex];
+            const allChars = level.chars.split('');
+            
+            // Filter chars that have less than 2 successes
+            // 规则修改：必须对2次才算掌握
+            const remaining = allChars.filter(c => (levelProgress[c] || 0) < 2);
+
+            if (remaining.length === 0) {
+                // 如果没有剩下的字符，说明本关全部掌握！
+                handleLevelComplete();
+            } else {
+                // 从剩下的字符中随机选一个
+                const char = remaining[Math.floor(Math.random() * remaining.length)];
+                
+                // 如果是该字符的第2次尝试，提示略有不同
+                const count = levelProgress[char] || 0;
+                const title = count === 0 ? `关卡 ${level.id}: 新信号` : `关卡 ${level.id}: 复习巩固`;
+                
+                setupGameRound(char, title, true);
+            }
+        }
+
+        function handleLevelComplete() {
+            // 播放胜利音效
+            playTone(600); setTimeout(() => playTone(800), 100); setTimeout(() => { playTone(1000); setTimeout(stopTone, 200) }, 200);
+
+            // 解锁逻辑
+            let msg = "特工训练非常扎实！<br>每个信号都掌握了两遍！";
+            if (currentLevelIndex + 1 === unlockedLevels) {
+                if (unlockedLevels < LEVELS.length) {
+                    unlockedLevels++;
+                    msg += "<br><br><span class='text-orange-500 font-bold'>解锁了新的关卡！</span>";
                 }
+            }
+
+            showModal('🏆', '完美通关！', msg, () => {
+                closeModal();
+                showLevelSelect();
             });
         }
 
-        // Initialize counters when page loads
-        window.addEventListener('load', animateCounters);
+        // --- Quiz Mode ---
+        function startQuiz() {
+            currentMode = 'quiz';
+            // Quiz picks from all unlocked levels so far
+            let availableChars = '';
+            for(let i=0; i < unlockedLevels; i++) {
+                availableChars += LEVELS[i].chars;
+            }
+            if (!availableChars) availableChars = LEVELS[0].chars; // Fallback
+            
+            const char = availableChars[Math.floor(Math.random() * availableChars.length)];
+            setupGameRound(char, "随机测验", false);
+        }
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+        // --- Common Game Round Logic ---
+        function setupGameRound(targetChar, title, showProgress = false) {
+            currentTarget = targetChar;
+            userInput = '';
+            document.getElementById('controls-area').classList.remove('hidden');
+            updateInputDisplay();
+            
+            const content = document.getElementById('app-content');
+            const code = MORSE_CODE[targetChar];
+            
+            // 逻辑修改：判断是否为测试模式（闯关或测验）
+            const isTestMode = currentMode === 'adventure' || currentMode === 'quiz';
+            
+            // 如果是测试模式，显示 ???，否则显示口诀
+            const mnemonic = isTestMode ? '<span class="text-slate-300">???</span>' : MNEMONICS[targetChar]; 
+            
+            // Generate visual dots/dashes
+            let visualCodeContent = '';
+            if (isTestMode) {
+                visualCodeContent = `<div class="text-slate-400 font-bold tracking-widest text-lg">请回忆信号</div>`;
+            } else {
+                visualCodeContent = code.split('').map(c => 
+                    c === '.' 
+                    ? `<div class="w-4 h-4 bg-amber-400 rounded-full mx-1 shadow-sm"></div>` 
+                    : `<div class="w-10 h-4 bg-blue-500 rounded-full mx-1 shadow-sm"></div>`
+                ).join('');
+            }
+
+            // Progress Bar Container (Content will be injected via updateProgressBar)
+            let progressContainer = '';
+            if (showProgress) {
+                progressContainer = `<div id="level-progress-bar" class="w-full mb-4"></div>`;
+            }
+
+            content.innerHTML = `
+                <div class="h-full flex flex-col items-center justify-center p-6 bg-slate-50">
+                    <h3 class="text-slate-500 font-bold tracking-widest mb-2 uppercase">${title}</h3>
+                    ${progressContainer}
                     
-                    document.querySelector('nav ul').classList.remove('active');
+                    <div class="relative mb-6">
+                        <div id="target-visual" class="w-32 h-32 bg-white rounded-3xl shadow-xl flex items-center justify-center text-slate-700 border-4 border-slate-100">
+                             <div class="text-6xl font-bold">${targetChar}</div>
+                             <div class="text-sm text-sky-400 mt-1 font-bold">${mnemonic}</div>
+                        </div>
+                        <button onclick="playSequence('${code}')" class="absolute -right-4 -bottom-4 w-12 h-12 bg-sky-500 text-white rounded-full shadow-lg flex items-center justify-center text-xl hover:scale-110 transition animate-pulse" title="听声音提示">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-200 rounded-full px-6 py-3 flex items-center justify-center mb-8 min-w-[200px] min-h-[50px]">
+                        ${visualCodeContent}
+                    </div>
+
+                    <p class="text-center text-slate-500 text-sm">
+                        ${isTestMode ? '依靠记忆发送信号<br>忘记了可以点小喇叭' : '看着上面的提示，<br>按下方的按钮发送信号！'}
+                    </p>
+                </div>
+            `;
+            
+            if (showProgress) {
+                updateProgressBar();
+            }
+
+            if (!isTestMode) {
+                setTimeout(() => playSequence(code), 500);
+            }
+        }
+
+        // 新增：独立更新进度条的函数
+        function updateProgressBar() {
+            const container = document.getElementById('level-progress-bar');
+            if (!container || currentMode !== 'adventure') return;
+
+            const level = LEVELS[currentLevelIndex];
+            // 总任务数 = 字符数 * 2
+            const totalOps = level.chars.length * 2;
+            
+            // 计算当前有效的完成数 (Math.max(0, val) 确保负数不会减少总进度条的显示，但逻辑上确实需要更多次成功才能填满)
+            // 如果希望倒扣时进度条真的后退，这里就不需要特殊处理，只要 totalOps 够大
+            // 但为了视觉效果，我们计算所有正向进度的总和。
+            // 负数虽然不显示在进度条上，但会阻碍该字符达到2。
+            const doneOps = Object.values(levelProgress).reduce((a, b) => a + Math.max(0, b), 0);
+            
+            container.innerHTML = `
+                <div class="bg-white px-4 py-1 rounded-full border-2 border-sky-200 text-sky-600 font-bold text-sm shadow-sm flex items-center gap-2 max-w-full overflow-hidden justify-center">
+                    <span class="whitespace-nowrap">进度: ${Math.min(doneOps, totalOps)}/${totalOps}</span>
+                    <div class="flex gap-1 overflow-hidden">
+                        ${Array(totalOps).fill(0).map((_, i) => 
+                            `<div class="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-300 ${i < doneOps ? 'bg-green-500 scale-110' : 'bg-slate-200'}"></div>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Input Handling ---
+        function handleInput(symbol, duration) {
+            // Prevent double firing on some touch devices that trigger both touch and mouse events
+            if (event.type === 'touchstart') {
+                event.preventDefault(); // Stop mouse emulation
+            }
+
+            userInput += symbol;
+            
+            // Clear any pending stop command from previous click
+            if (toneTimeout) clearTimeout(toneTimeout);
+            
+            playTone(600);
+            updateInputDisplay();
+            
+            // Auto stop after the specified duration (Fixed Duration Mode)
+            toneTimeout = setTimeout(() => {
+                stopTone();
+            }, duration);
+
+            // Limit length
+            if(userInput.length > 6) {
+                userInput = userInput.substring(0, 6);
+                updateInputDisplay();
+            }
+        }
+
+        function backspace() {
+            userInput = userInput.slice(0, -1);
+            updateInputDisplay();
+        }
+
+        function updateInputDisplay() {
+            const display = document.getElementById('user-input-display');
+            display.innerText = userInput;
+        }
+
+        function checkAnswer() {
+            const targetCode = MORSE_CODE[currentTarget];
+            
+            if (userInput === targetCode) {
+                handleSuccess();
+            } else {
+                handleFail();
+            }
+        }
+
+        function handleSuccess() {
+            // Check if Level Complete Logic is needed
+            if (currentMode === 'adventure') {
+                // Increment success count for this char
+                const currentCount = levelProgress[currentTarget] || 0;
+                levelProgress[currentTarget] = currentCount + 1;
+                
+                // Update UI immediately
+                updateProgressBar();
+
+                // Determine feedback message
+                let specialMsg = "";
+                if (levelProgress[currentTarget] === 1) {
+                    specialMsg = "正确！再巩固一次！";
+                } else {
+                    specialMsg = "太棒了！完全掌握！";
                 }
+
+                // Check if ALL chars are at 2
+                const level = LEVELS[currentLevelIndex];
+                const notDone = level.chars.split('').some(c => (levelProgress[c] || 0) < 2);
+
+                if (!notDone) {
+                    // All done
+                    handleLevelComplete();
+                    return;
+                }
+                
+                // Pass custom message to modal
+                playTone(800); setTimeout(stopTone, 100);
+                setTimeout(() => { playTone(1200); setTimeout(stopTone, 100); }, 150);
+
+                showModal('🎉', '正确！', specialMsg, () => {
+                    closeModal();
+                    nextLevelRound();
+                });
+                return;
+            }
+
+            // Normal Success (Quiz Mode)
+            const msgs = ["发送成功！", "完美信号！", "特工，干得好！", "收到讯息！"];
+            const msg = msgs[Math.floor(Math.random() * msgs.length)];
+            
+            // Correct sound
+            playTone(800); setTimeout(stopTone, 100);
+            setTimeout(() => { playTone(1200); setTimeout(stopTone, 100); }, 150);
+
+            showModal('🎉', '正确！', msg, () => {
+                closeModal();
+                startQuiz();
             });
-        });
+        }
+
+        function handleFail() {
+            // Error sound
+            playTone(200); setTimeout(stopTone, 300);
+            
+            let title = '信号干扰';
+            let icon = '🤔';
+            
+            // 生成正确答案的视觉提示
+            const targetCode = MORSE_CODE[currentTarget];
+            const visualAnswer = targetCode.split('').map(c => 
+                c === '.' 
+                ? `<div class="w-3 h-3 bg-amber-400 rounded-full mx-0.5"></div>` 
+                : `<div class="w-8 h-3 bg-blue-500 rounded-full mx-0.5"></div>`
+            ).join('');
+
+            let msgHtml = '';
+
+            // 闯关模式惩罚逻辑
+            if (currentMode === 'adventure') {
+                const currentCount = levelProgress[currentTarget] || 0;
+                // 扣分：让进度倒退1
+                levelProgress[currentTarget] = currentCount - 1;
+                
+                if (levelProgress[currentTarget] < -2) levelProgress[currentTarget] = -2;
+
+                updateProgressBar();
+                
+                title = '别灰心！';
+                icon = '💪';
+                msgHtml = `
+                    <div class="space-y-3">
+                        <p class="text-slate-600">刚才的信号有点小偏差。<br>为了巩固记忆，我们需要多练习一次！</p>
+                        <div class="bg-slate-50 border-2 border-orange-100 rounded-xl p-3 flex flex-col items-center animate-pulse">
+                            <span class="text-xs text-orange-400 font-bold mb-1 uppercase tracking-wider">正确答案</span>
+                            <div class="flex items-center justify-center gap-1 mb-1">
+                                ${visualAnswer}
+                            </div>
+                            <span class="font-mono text-sky-500 font-bold tracking-[0.2em]">${targetCode}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Quiz mode generic fail
+                 msgHtml = `
+                    <div class="space-y-3">
+                        <p class="text-slate-600">不对哦，再试一次！</p>
+                        <div class="bg-slate-50 border-2 border-slate-200 rounded-xl p-3 flex flex-col items-center">
+                            <span class="text-xs text-slate-400 font-bold mb-1 uppercase tracking-wider">正确答案</span>
+                            <div class="flex items-center justify-center gap-1 mb-1">
+                                ${visualAnswer}
+                            </div>
+                            <span class="font-mono text-sky-500 font-bold tracking-[0.2em]">${targetCode}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            showModal(icon, title, msgHtml, () => {
+                closeModal();
+                userInput = '';
+                updateInputDisplay();
+            });
+        }
+
+        // --- Modal System ---
+        let onModalClose = null;
+
+        function showModal(icon, title, msg, callback) {
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('modal-title').innerText = title;
+            // Changed to innerHTML to support rich content/formatting
+            document.getElementById('modal-msg').innerHTML = msg;
+            document.getElementById('modal').classList.remove('hidden');
+            onModalClose = callback;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            if (onModalClose) {
+                const cb = onModalClose;
+                onModalClose = null;
+                cb();
+            }
+        }
+
     </script>
 </body>
-
 </html>
